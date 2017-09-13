@@ -18,7 +18,7 @@ api.get('/usuarios/Entrada/:usuariosId', usuariosCtrl.getEntrada)
 api.get('/usuarios/validarCasino/:usuariosId', usuariosCtrl.validarCasino)
 api.get('/usuarios/validarCine/:usuariosId', usuariosCtrl.validarCine)
 api.get('/usuarios/rehab/:usuariosId', usuariosCtrl.rehabTickets)
-api.get('/usuarios/Entrada/Detalle', usuariosCtrl.getDetalleTinket)
+api.post('/usuarios/Entrada/Detalle', usuariosCtrl.getDetalleTinket)
 
 api.put('/usuarios/alm/:usuariosId', usuariosCtrl.almacenarTinket)
 

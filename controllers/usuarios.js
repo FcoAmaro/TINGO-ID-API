@@ -112,7 +112,7 @@ function rehabTickets (req,res)  {
 	})
 }
 
-function getDetalleTinket (req,res) {
+function DetalleTinket (req,res) {
 	var jsonApp = JSON.parse(req.responseText);
 
 	var nombre_empresa = req.body.empresa;
@@ -190,5 +190,5 @@ module.exports = {
 	validarCine,
 	rehabTickets,
 	loginEmpresa,
-	getDetalleTinket
+	DetalleTinket
 }
