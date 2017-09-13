@@ -77,6 +77,73 @@ function rehabTickets (req,res)  {
 	})
 }
 
+function getDetalleTinket (req,res) {
+	var jsonApp = JSON.parse(req.responseText);
+
+	var nombre_empresa = req.body.empresa;
+	var	numero_registro = req.body.id;
+		/*
+		*
+		 Buscar en la base de datos el nombre de la empresa para encontrar ip y puerto
+		 *
+		 */
+	var socket_empresa = getSocketEmpresa(nombre_empresa);	 
+	
+	// login a la empresa para obtener el token
+	var token = loginEmpresa(socket_empresa);
+	
+	//Ahora si podemos hacer la consulta a la empresa
+	
+	// Parametros del JSON que se envia a la caja negra
+	const params = {
+		'codigoEntradaText':req.body.id,
+		'token':token
+	}
+
+	var xhr = new XMLHttpRequest();
+	var URL = "http://" + JSON.parse(jsonApp.responseText).ip + ":" + JSON.parse(jsonApp.responseText).puerto + "/check_buy";
+	xhr.open('POST', URL, false);
+
+	// Agregamos los parametros del formulario post
+	
+	//xhr.setRequestHeader('token', token);
+	xhr.setRequestHeader('Content-type','application/json')
+	xhr.send(JSON.stringify(params));
+	
+	//Ahora podemos hacer lo que queramos con la respuesta
+	xhr.onload = function(){
+		var detalle_registro = JSON.parse(xhr.responseText);
+		res.send(detalle_registro);
+	}
+
+/*
+	var xhr = (function (token){
+		function getXMLHttpRequest(method,url,async){
+			var xmlHttpRequest = new XMLHttpRequest();
+			xmlHttpRequest.open(method,url,async);
+			xmlHttpRequest.setRequestHeader('token', token);
+			return xmlHttpRequest;
+		}
+		return getXMLHttpRequest;
+	})
+*/
+
+}
+
+
+function loginEmpresa (req, res){
+	var xhr = new XMLHttpRequest();
+	var URL = "http://" + JSON.parse(req.responseText).ip + ":" + JSON.parse(req.responseText).puerto + "/login";
+
+	xhr.open("POST", URL, false, "TingoID", "1234");
+	xhr.send();
+	var jsonResponse = JSON.parse(xhr.responseText);
+	var token = jsonResponse.token;
+	return token;
+}
+
+
+
 
 module.exports = {
     getUsuarios,
@@ -84,5 +151,7 @@ module.exports = {
 	getEntrada,
    	validarCasino,
 	validarCine,
-	rehabTickets
+	rehabTickets,
+	loginEmpresa,
+	getDetalleTinket
 }
