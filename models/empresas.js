@@ -1,1 +1,16 @@
-../.git/annex/objects/4M/Wk/SHA256E-s518--f34ecffa8b4b7a66f5bdc18477dcb6f0b53ac86c95c7c9ad2bd8643f07c47e18.js/SHA256E-s518--f34ecffa8b4b7a66f5bdc18477dcb6f0b53ac86c95c7c9ad2bd8643f07c47e18.js
+'use strict'
+
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const bcrypst = require('bcrypt-nodejs')
+
+const EmpresasSchema = Schema({
+	nombreEmpresa : {type: String, required: true, unique: true},
+	puerto : Number,
+	dirIP : String,
+	token : String
+})
+
+
+module.exports = mongoose.model('empresa', EmpresasSchema)
+	

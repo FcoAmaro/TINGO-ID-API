@@ -1,1 +1,29 @@
-../.git/annex/objects/1v/ZG/SHA256E-s3584--ad1fb91bff25c93dc2f22a750e9c73722f97645dba496db9576c15d65e79afec.js/SHA256E-s3584--ad1fb91bff25c93dc2f22a750e9c73722f97645dba496db9576c15d65e79afec.js
+'use strict'
+
+const Empresa = require('../models/empresas')
+
+
+function getEmpresas (req,res) {
+	Empresa.find({}, (err, empresa) => {
+		if (err) return res.status(500).send({message: 'Error: '+err})	
+		if (!empresa) return res.status(404).send({message: 'Empresao inexistente'})	
+		res.status(200).send({empresa: empresa})
+})
+}
+
+
+function getEmpresa (req, res) {
+	let empresaId = req.params.empresasId
+
+	Empresa.findById(empresaId, (err, empresa) => {
+		if (err) return res.status(500).send({message: 'Error: '+err})	
+		if (!empresa) return res.status(404).send({message: 'Empresao inexistente'})	
+		res.status(200).send({empresa: empresa})
+	})
+}
+
+
+module.exports = {
+    getEmpresas,
+	getEmpresa
+}
