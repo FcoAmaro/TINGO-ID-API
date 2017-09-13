@@ -2,16 +2,22 @@
 
 const express = require('express')
 const usuariosCtrl = require('../controllers/usuarios')
+const empresasCtrl = require('../controllers/empresas')
 const userCtrl = require('../controllers/user')
 const auth = require('../middlewares/auth')
 const api = express.Router()
 
+api.get('/empresas', empresasCtrl.getEmpresas)
+api.get('/empresas/:empresasId', empresasCtrl.getEmpresas)
+
 api.get('/usuarios', usuariosCtrl.getUsuarios)
-api.get('/usuarios/:usuariosId', auth, usuariosCtrl.getUsuario)
-api.get('/usuarios/Entrada/:usuariosId', auth, usuariosCtrl.getEntrada)
-api.get('/usuarios/validarCasino/:usuariosId', auth, usuariosCtrl.validarCasino)
-api.get('/usuarios/validarCine/:usuariosId', auth, usuariosCtrl.validarCine)
-api.get('/usuarios/rehab/:usuariosId', auth, usuariosCtrl.rehabTickets)
+api.get('/usuarios/:usuariosId', usuariosCtrl.getUsuario)
+api.get('/usuarios/Entrada/:usuariosId', usuariosCtrl.getEntrada)
+api.get('/usuarios/validarCasino/:usuariosId', usuariosCtrl.validarCasino)
+api.get('/usuarios/validarCine/:usuariosId', usuariosCtrl.validarCine)
+api.get('/usuarios/rehab/:usuariosId', usuariosCtrl.rehabTickets)
+
+api.put('/usuarios/up/:usuariosId', usuariosCtrl.updateUsuario)
 
 api.post('/signup', userCtrl.signUp)
 api.post('/signin', userCtrl.signIn)

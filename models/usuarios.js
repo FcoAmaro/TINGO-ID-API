@@ -8,16 +8,14 @@ const UsuariosSchema = Schema({
 	nombre: { type: String, unique: true, required: true},
 	correo: { type: String, unique: true, required: true},
 	pass : String,
-	tinket: {
-		casino:[{
-			id: Number,
-			estado: {type:String,default:'valido'}
-		}],
-		cine:[{
-			id: Number,
-			estado: {type:String,default:'valido'}
-		}],
-	}
+	tinkets: [{
+		id: Number,
+		estado: {type:String,default:'valido'},
+		empresa: {type: String,required: true},
+		fechaExp: Date,
+		costo: Number,
+		detalle: String
+	}]
 })
 
 
