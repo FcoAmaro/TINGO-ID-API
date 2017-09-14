@@ -24,7 +24,7 @@ function iniciarSesion (req, res) {
 
     req.usuario = usuario
     res.status(200).send({
-      message: 'Te has logueado correctamente'+req.body.correo + ' - '+req.body.pass,
+      message: 'Te has logueado correctamente '+ usuario.nombre,
       token: service.createToken(usuario)
     })
   })
@@ -64,7 +64,7 @@ function almacenarTinket (req, res) {
 
 	Usuario.findOne({"tinket.id":idRes},(err, tinket) => {
 		if (err) return res.status(500).send({message: 'Error: '+err})	
-		if (tinket) return res.status(404).send({message: 'El tiket '+idRes+' ya fue alamcenado previamente'})
+		if (tinket) return res.status(404).send({message: 'El tiket '+idRes+' ya fue almacenado previamente'})
 		Usuario.findByIdAndUpdate(usuarioId, { $push: { tinket : Tinket}}, { new: true }, (err, usuario) => {
 			if (err) return res.status(500).send({message: 'Error: '+err})	
 			if (!usuario) return res.status(404).send({message: 'Usuario inexistente'})
