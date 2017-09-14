@@ -12,6 +12,7 @@ api.get('/empresas/:empresasId', empresasCtrl.getEmpresa)
 api.post('/empresas/buscar', empresasCtrl.buscarEmpresa)
 
 api.post('/usuarios/crear', usuariosCtrl.crearUsuario)
+api.post('/usuarios/sesion', usuariosCtrl.iniciarSesion)
 api.get('/usuarios', usuariosCtrl.getUsuarios)
 api.get('/usuarios/:usuariosId', usuariosCtrl.getUsuario)
 api.get('/usuarios/Entrada/:usuariosId', usuariosCtrl.getEntrada)

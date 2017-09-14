@@ -18,13 +18,13 @@ function crearUsuario (req, res) {
 }
 
 function iniciarSesion (req, res) {
-  Usuario.find({ correo: req.body.correo, pass: req.body.pass}, (err, usuario) => {
+  Usuario.findOne({ correo: req.body.correo, pass: req.body.pass}, (err, usuario) => {
     if (err) return res.status(500).send({ message: err })
     if (!usuario) return res.status(404).send({ message: 'No existe el usuario' })
 
     req.usuario = usuario
     res.status(200).send({
-      message: 'Te has logueado correctamente',
+      message: 'Te has logueado correctamente'+req.body.correo + ' - '+req.body.pass,
       token: service.createToken(usuario)
     })
   })
