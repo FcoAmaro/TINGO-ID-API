@@ -1,22 +1,34 @@
 'use strict'
 
 const Usuario = require('../models/usuarios')
-
+const service = require('../services')
 
 function crearUsuario (req, res) {
 	const usuario = new Usuario({
 		nombre: req.body.nombre,
 		correo: req.body.correo,
 		pass: req.body.pass,
-		tinket: [{id : 0,empresa: "TingoID"}]
+		tinket: [{id: 0, empresa: "TingoID"}]
 	})
 
 	usuario.save((err,usuario) => {
 		if (err) return res.status(500).send({ message: `Error al crear el usuario: `+err })
-		res.status(201).send({ usuario:usuario,message: 'Registrado!!'})
+		res.status(201).send({ usuario:usuario,message: 'Registrado!!', token: service.createToken(usuario)})
 	})
 }
 
+function iniciarSesion (req, res) {
+  Usuario.find({ correo: req.body.correo, pass: req.body.pass}, (err, usuario) => {
+    if (err) return res.status(500).send({ message: err })
+    if (!usuario) return res.status(404).send({ message: 'No existe el usuario' })
+
+    req.usuario = usuario
+    res.status(200).send({
+      message: 'Te has logueado correctamente',
+      token: service.createToken(usuario)
+    })
+  })
+}
 
 function getUsuarios (req,res) {
 	Usuario.find({}, (err, usuario) => {
@@ -37,7 +49,6 @@ function getUsuario (req, res) {
 	})
 }
 
-
 function almacenarTinket (req, res) {
 	let usuarioId = req.params.usuariosId
 	const idRes = req.body.id
@@ -51,11 +62,17 @@ function almacenarTinket (req, res) {
 		return res.status(500).send({message: 'Ticket no válido, corresponde a : '+estadoRes})
 	}
 
-	Usuario.findByIdAndUpdate(usuarioId, { $push: { tinket : Tinket}}, { new: true }, (err, usuario) => {
+	Usuario.findOne({"tinket.id":idRes},(err, tinket) => {
 		if (err) return res.status(500).send({message: 'Error: '+err})	
-		if (!usuario) return res.status(404).send({message: 'Usuario inexistente'})
-		res.status(200).send({usuario: usuario,message: ' Ingresado'})
+		if (tinket) return res.status(404).send({message: 'El tiket '+idRes+' ya fue alamcenado previamente'})
+		Usuario.findByIdAndUpdate(usuarioId, { $push: { tinket : Tinket}}, { new: true }, (err, usuario) => {
+			if (err) return res.status(500).send({message: 'Error: '+err})	
+			if (!usuario) return res.status(404).send({message: 'Usuario inexistente'})
+			res.status(200).send({usuario: usuario,message: ' Ingresado'})
+		})
 	})
+
+	
 }
 
 function getEntrada (req, res) {
@@ -115,6 +132,7 @@ function rehabTickets (req,res)  {
 
 module.exports = {
 	crearUsuario,
+	iniciarSesion,
     getUsuarios,
 	getUsuario,
 	almacenarTinket,

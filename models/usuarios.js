@@ -10,13 +10,13 @@ const UsuariosSchema = Schema({
 	correo: { type: String, unique: true, required: true},
 	pass : String,
 	registro: {type: Date, default: Date.now},
-	tinket: [{
-		id: {type: Number, required: true,unique: true},
+	tinket: {type: [{
+		id: {type: Number, required: true},
 		estado: {type: String, required: true, default: "NONE"},
 		empresa: {type: String, required: true},
 		emision: Date,
 		detalle: String
-	}]
+	}],required:false}
 })
 
 UsuariosSchema.plugin(uniqueValidator)
